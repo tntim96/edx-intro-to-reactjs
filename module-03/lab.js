@@ -58,22 +58,6 @@ function Table(props) {
   );
 }
 
-class InputAndLabelClass extends React.Component{
-
-    constructor(props){
-        super(props)
-        this.state = {value: ''}
-    }
-    render(){
-        return (
-            <label>
-            {this.props.label}(Class)<br/>
-            <input type="text" onChange={this.props.handleChange}/><br/>
-            </label>
-        )
-    }
-}
-
 function InputAndLabel(props) {
   return (
       <label>
@@ -84,26 +68,26 @@ function InputAndLabel(props) {
 }
 
 function SelectAndLabel(props) {
+  var options = props.activities.map((item,index) => <option key={index} value={item}>{item}</option>)
   return (
       <label>
       {props.label}<br/>
       <select value={props.value} onChange={props.handleChange}>
-        <option value="Science Lab">Science Lab</option>
-        <option value="Swimming">Swimming</option>
-        <option value="Cooking">Cooking</option>
-        <option value="Painting">Painting</option>
+        {options}
       </select><br/>
       </label>
   );
 }
 
 class App extends React.Component {
+  static activities = ['Science Lab','Swimming','Science Lab','Swimming','Painting'];
+
   constructor(props) {
     super(props);
     this.state = {
       firstName: ""
       , lastName: ""
-      , activity: ""
+      , activity: App.activities[0]
       , items: []
     };
     this.handleFirstNameChange = this.handleFirstNameChange.bind(this)
@@ -111,16 +95,12 @@ class App extends React.Component {
     this.handleActivityChange = this.handleActivityChange.bind(this)
   }
   handleFirstNameChange(event) {
-    //console.log('handleChange1', event.target.value)
     this.setState({ firstName: event.target.value });
-    //console.log('handleChange2', this.state.firstName)
   }
   handleLastNameChange(event) {
-    //console.log('handleChange', event.target.value)
     this.setState({ lastName: event.target.value });
   }
   handleActivityChange(event) {
-    //console.log('handleChange', event.target.value)
     this.setState({ activity: event.target.value });
   }
   addItem() {
@@ -130,7 +110,7 @@ class App extends React.Component {
       lastName: this.state.lastName,
       activity: this.state.activity
     });
-    this.setState({ items: itemsCopy, firstName: "", lastName: "" , activity: "" });
+    this.setState({ items: itemsCopy, firstName: "", lastName: "" , activity: App.activities[0] });
     console.log('state', this.state)
   }
 
@@ -139,7 +119,7 @@ class App extends React.Component {
       <div>
         <InputAndLabel label="First Name" value={this.state.firstName} handleChange={this.handleFirstNameChange}/>
         <InputAndLabel label="Last Name" value={this.state.lastName} handleChange={this.handleLastNameChange}/>
-        <SelectAndLabel label="Select Activity" value={this.state.activity} handleChange={this.handleActivityChange}/>
+        <SelectAndLabel label="Select Activity" value={this.state.activity} handleChange={this.handleActivityChange} activities={App.activities}/>
         <button onClick={() => this.addItem()}>Submit</button><br/>
         <Table tableList={this.state.items}/>
       </div>
