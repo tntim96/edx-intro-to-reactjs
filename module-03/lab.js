@@ -11,7 +11,6 @@ function RowButton(props) {
 }
 
 function Row(props) {
-  console.log("props", props)
   var style = {
     display: "flex"
   };
@@ -84,7 +83,7 @@ function CheckBoxesAndLabel(props) {
   var checkboxes = props.restrictions.map((item,index) => (
     <div key={index}>
       <label>
-        <input type="checkbox" name={props.name} value={item.value} onChange={props.handleChange}/> {item.description}
+        <input type="checkbox" checked={props.value.indexOf(item.value) !== -1} name={props.name} value={item.value} onChange={props.handleChange}/> {item.value}) {item.description}
       </label>
     </div>
   ));
@@ -129,7 +128,6 @@ class App extends React.Component {
     this.setState({ activity: event.target.value });
   }
   handleRestrictionsChange(event) {
-    debugger;
     var restrictionsCopy = this.state.restrictions.slice();
     if (event.target.checked) {
       restrictionsCopy.push(event.target.value)
@@ -155,15 +153,11 @@ class App extends React.Component {
       restrictions: this.state.restrictions
     });
     this.setState({ items: itemsCopy, firstName: "", lastName: "" , activity: App.activities[0], restrictions: [] });
-    console.log('state', this.state)
+    // console.log('state', this.state)
   }
   removeItem(index) {
     var itemsCopy = this.state.items.slice();
     itemsCopy.splice(index, 1);
-    itemsCopy.sort((a, b) => {
-      return b.score - a.score;
-    });
-
     this.setState({ items: itemsCopy });
     // console.log('removeItem', index)
   }
