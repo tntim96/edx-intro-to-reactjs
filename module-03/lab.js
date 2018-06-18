@@ -83,16 +83,32 @@ function InputAndLabel(props) {
   );
 }
 
+function SelectAndLabel(props) {
+  return (
+      <label>
+      {props.label}<br/>
+      <select value={props.value} onChange={props.handleChange}>
+        <option value="Science Lab">Science Lab</option>
+        <option value="Swimming">Swimming</option>
+        <option value="Cooking">Cooking</option>
+        <option value="Painting">Painting</option>
+      </select><br/>
+      </label>
+  );
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       firstName: ""
       , lastName: ""
+      , activity: ""
       , items: []
     };
     this.handleFirstNameChange = this.handleFirstNameChange.bind(this)
     this.handleLastNameChange = this.handleLastNameChange.bind(this)
+    this.handleActivityChange = this.handleActivityChange.bind(this)
   }
   handleFirstNameChange(event) {
     //console.log('handleChange1', event.target.value)
@@ -103,13 +119,18 @@ class App extends React.Component {
     //console.log('handleChange', event.target.value)
     this.setState({ lastName: event.target.value });
   }
+  handleActivityChange(event) {
+    //console.log('handleChange', event.target.value)
+    this.setState({ activity: event.target.value });
+  }
   addItem() {
     var itemsCopy = this.state.items.slice();
     itemsCopy.push({
       firstName: this.state.firstName,
-      lastName: this.state.lastName
+      lastName: this.state.lastName,
+      activity: this.state.activity
     });
-    this.setState({ items: itemsCopy, firstName: "", lastName: "" });
+    this.setState({ items: itemsCopy, firstName: "", lastName: "" , activity: "" });
     console.log('state', this.state)
   }
 
@@ -118,6 +139,7 @@ class App extends React.Component {
       <div>
         <InputAndLabel label="First Name" value={this.state.firstName} handleChange={this.handleFirstNameChange}/>
         <InputAndLabel label="Last Name" value={this.state.lastName} handleChange={this.handleLastNameChange}/>
+        <SelectAndLabel label="Select Activity" value={this.state.activity} handleChange={this.handleActivityChange}/>
         <button onClick={() => this.addItem()}>Submit</button><br/>
         <Table tableList={this.state.items}/>
       </div>
