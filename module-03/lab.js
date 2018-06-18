@@ -17,7 +17,7 @@ function Row(props) {
   };
   return (
     <tr>
-      <td>{props.index}</td>
+      <td><button  onClick={() => props.removeItem(props.index)}>X</button></td>
       <td>{props.firstName}</td>
       <td>{props.lastName}</td>
       <td>{props.activity}</td>
@@ -51,6 +51,7 @@ function Table(props) {
           lastName={item.lastName}
           activity={item.activity}
           restrictions={item.restrictions}
+          removeItem={props.removeItem}
         />
       ))}
       </tbody>
@@ -116,6 +117,7 @@ class App extends React.Component {
     this.handleLastNameChange = this.handleLastNameChange.bind(this)
     this.handleActivityChange = this.handleActivityChange.bind(this)
     this.handleRestrictionsChange = this.handleRestrictionsChange.bind(this)
+    this.removeItem = this.removeItem.bind(this)
   }
   handleFirstNameChange(event) {
     this.setState({ firstName: event.target.value });
@@ -155,6 +157,16 @@ class App extends React.Component {
     this.setState({ items: itemsCopy, firstName: "", lastName: "" , activity: App.activities[0], restrictions: [] });
     console.log('state', this.state)
   }
+  removeItem(index) {
+    var itemsCopy = this.state.items.slice();
+    itemsCopy.splice(index, 1);
+    itemsCopy.sort((a, b) => {
+      return b.score - a.score;
+    });
+
+    this.setState({ items: itemsCopy });
+    // console.log('removeItem', index)
+  }
 
   render() {
     return (
@@ -164,7 +176,7 @@ class App extends React.Component {
         <SelectAndLabel label="Select Activity" value={this.state.activity} handleChange={this.handleActivityChange} activities={App.activities}/>
         <CheckBoxesAndLabel label="Check all that apply:" name="restrictions" value={this.state.restrictions} handleChange={this.handleRestrictionsChange} restrictions={App.restrictions}/>
         <button onClick={() => this.addItem()}>Submit</button><br/>
-        <Table tableList={this.state.items}/>
+        <Table tableList={this.state.items} removeItem={this.removeItem}/>
       </div>
     );
   }
